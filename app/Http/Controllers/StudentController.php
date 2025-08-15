@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreStudentRequest;
 use App\Http\Requests\UpdateStudentRequest;
 use App\Models\Student;
+use App\Models\Course;
 
 class StudentController extends Controller
 {
@@ -13,7 +14,7 @@ class StudentController extends Controller
      */
     public function index()
     {
-        $students = Student::all();
+        $students = Student::with("courses.professor")->get();
         return view('students.index', compact('students'));
     }
 
@@ -22,7 +23,8 @@ class StudentController extends Controller
      */
     public function create()
     {
-        return view('students.create');
+        $courses = Course::all();
+        return view('students.create', compact('courses'));
     }
 
     /**
@@ -30,7 +32,12 @@ class StudentController extends Controller
      */
     public function store(StoreStudentRequest $request)
     {
-        Student::create($request->validated());
+        $student = Student::create($request->validated());
+        
+        if ($request->has('course_ids')) {
+            $student->courses()->attach($request->course_ids);
+        }
+        
         return redirect()->route('students.index');
     }
 
@@ -47,7 +54,8 @@ class StudentController extends Controller
      */
     public function edit(Student $student)
     {
-        return view('students.edit', compact('student'));
+        $courses = Course::all();
+        return view('students.edit', compact('student', 'courses'));
     }
 
     /**
@@ -56,6 +64,13 @@ class StudentController extends Controller
     public function update(UpdateStudentRequest $request, Student $student)
     {
         $student->update($request->validated());
+        
+        if ($request->has('course_ids')) {
+            $student->courses()->sync($request->course_ids);
+        } else {
+            $student->courses()->detach();
+        }
+        
         return redirect()->route('students.index');
     }
 

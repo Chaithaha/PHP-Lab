@@ -81,28 +81,6 @@
     .btn:hover {
         opacity: 0.8;
     }
-    .courses {
-        font-size: 12px;
-        color: #6c757d;
-        max-width: 300px;
-    }
-    .course-item {
-        display: block;
-        background: #e9ecef;
-        padding: 4px 8px;
-        border-radius: 4px;
-        margin: 2px 0;
-        font-size: 11px;
-        border-left: 3px solid #007bff;
-    }
-    .course-name {
-        font-weight: 600;
-        color: #495057;
-    }
-    .professor-name {
-        color: #6c757d;
-        font-size: 10px;
-    }
 </style>
 @endsection
 
@@ -120,7 +98,6 @@
                 <th>First Name</th>
                 <th>Last Name</th>
                 <th>Email</th>
-                <th>Enrolled Courses</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -131,22 +108,6 @@
                 <td>{{ $student->fname }}</td>
                 <td>{{ $student->lname }}</td>
                 <td>{{ $student->email }}</td>
-                <td class="courses">
-                    @if($student->courses->count() > 0)
-                        @foreach($student->courses as $course)
-                            <div class="course-item">
-                                <div class="course-name">{{ $course->name }}</div>
-                                @if($course->professor)
-                                    <div class="professor-name">Prof. {{ $course->professor->name }}</div>
-                                @else
-                                    <div class="professor-name">No professor assigned</div>
-                                @endif
-                            </div>
-                        @endforeach
-                    @else
-                        <span style="color: #dc3545; font-style: italic;">No courses enrolled</span>
-                    @endif
-                </td>
                 <td>
                     <div class="action-buttons">
                         <a href="{{ route('students.show', $student->id) }}" class="btn btn-view">View</a>

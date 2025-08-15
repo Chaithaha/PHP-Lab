@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Students Management')
+@section('title', 'Courses Management')
 
 @section('styles')
 <style>
@@ -81,27 +81,15 @@
     .btn:hover {
         opacity: 0.8;
     }
-    .courses {
+    .description {
+        max-width: 300px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .professor {
         font-size: 12px;
         color: #6c757d;
-        max-width: 300px;
-    }
-    .course-item {
-        display: block;
-        background: #e9ecef;
-        padding: 4px 8px;
-        border-radius: 4px;
-        margin: 2px 0;
-        font-size: 11px;
-        border-left: 3px solid #007bff;
-    }
-    .course-name {
-        font-weight: 600;
-        color: #495057;
-    }
-    .professor-name {
-        color: #6c757d;
-        font-size: 10px;
     }
 </style>
 @endsection
@@ -109,49 +97,38 @@
 @section('content')
 <div class="main-container">
     <div class="header">
-        <h1 class="title">Students Management</h1>
-        <a href="{{ route('students.create') }}" class="add-btn">Add New Student</a>
+        <h1 class="title">Courses Management</h1>
+        <a href="{{ route('courses.create') }}" class="add-btn">Add New Course</a>
     </div>
 
     <table>
         <thead>
             <tr>
                 <th>ID</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Email</th>
-                <th>Enrolled Courses</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Professor</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
-            @foreach($students as $student)
+            @foreach($courses as $course)
             <tr>
-                <td>{{ $student->id }}</td>
-                <td>{{ $student->fname }}</td>
-                <td>{{ $student->lname }}</td>
-                <td>{{ $student->email }}</td>
-                <td class="courses">
-                    @if($student->courses->count() > 0)
-                        @foreach($student->courses as $course)
-                            <div class="course-item">
-                                <div class="course-name">{{ $course->name }}</div>
-                                @if($course->professor)
-                                    <div class="professor-name">Prof. {{ $course->professor->name }}</div>
-                                @else
-                                    <div class="professor-name">No professor assigned</div>
-                                @endif
-                            </div>
-                        @endforeach
+                <td>{{ $course->id }}</td>
+                <td>{{ $course->name }}</td>
+                <td class="description">{{ $course->description }}</td>
+                <td>
+                    @if($course->professor)
+                        <span class="professor">{{ $course->professor->name }}</span>
                     @else
-                        <span style="color: #dc3545; font-style: italic;">No courses enrolled</span>
+                        <span class="professor">No professor assigned</span>
                     @endif
                 </td>
                 <td>
                     <div class="action-buttons">
-                        <a href="{{ route('students.show', $student->id) }}" class="btn btn-view">View</a>
-                        <a href="{{ route('students.edit', $student->id) }}" class="btn btn-edit">Edit</a>
-                        <form action="{{ route('students.destroy', $student->id) }}" method="POST" style="display: inline;">
+                        <a href="{{ route('courses.show', $course->id) }}" class="btn btn-view">View</a>
+                        <a href="{{ route('courses.edit', $course->id) }}" class="btn btn-edit">Edit</a>
+                        <form action="{{ route('courses.destroy', $course->id) }}" method="POST" style="display: inline;">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-delete" onclick="return confirm('Are you sure?')">Delete</button>

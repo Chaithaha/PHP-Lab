@@ -25,5 +25,11 @@ class DatabaseSeeder extends Seeder
         ]);
         
         Student::factory(100)->create();
+        
+        $this->call([
+            ProfessorSeeder::class,
+            CourseSeeder::class,
+            StudentCourseSeeder::class,
+        ]);
     }
 }

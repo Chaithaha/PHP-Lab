@@ -25,6 +25,8 @@ class UpdateStudentRequest extends FormRequest
             'fname' => 'required|string',
             'lname' => 'required|string',
             'email' => 'required|email',
+            'course_ids' => 'array',
+            'course_ids.*' => 'exists:courses,id',
         ];
     }
 }
